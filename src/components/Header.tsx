@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { Coffee, Menu as MenuIcon, X, ArrowUpRight } from "lucide-react";
+import { Coffee, Menu as MenuIcon, X, ArrowUpRight, ShoppingBag } from "lucide-react";
+import { useCart } from "../context/CartContext";
 
 const NAV = [
   { label: "Home", href: "#home" },
@@ -12,12 +13,14 @@ const NAV = [
 
 interface HeaderProps {
   started: boolean;
+  onCartOpen: () => void;
 }
 
-export default function Header({ started }: HeaderProps) {
+export default function Header({ started, onCartOpen }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const barRef = useRef<HTMLDivElement>(null);
+  const { count, orders } = useCart();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -84,6 +87,11 @@ export default function Header({ started }: HeaderProps) {
 
           {/* CTA + burger */}
           <div className="flex items-center gap-2 sm:gap-3">
+            <button onClick={onCartOpen} className="relative grid h-11 w-11 place-items-center rounded-[16px] bg-lemon text-espresso transition-transform hover:scale-105" aria-label={`Open cart, ${count} items`}>
+              <ShoppingBag size={20} />
+              {count > 0 && <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-heather-deep px-1 text-[10px] font-black text-white">{count}</span>}
+            </button>
+            <a href="#orders" onClick={(event) => { event.preventDefault(); onCartOpen(); }} className="hidden text-[10px] font-extrabold uppercase tracking-widest text-espresso/60 xl:block" title={`${orders.length} saved orders`}>Orders {orders.length > 0 && `(${orders.length})`}</a>
             <a
               href="#menu"
               className="group hidden items-center gap-2 rounded-[20px] bg-espresso px-5 py-3 font-display text-[13px] font-extrabold uppercase tracking-widest text-porcelain transition-all duration-300 hover:bg-heather-deep hover:shadow-[0_10px_30px_-8px_rgba(124,92,191,0.7)] sm:inline-flex"

@@ -3,14 +3,16 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Plus, Sparkles } from "lucide-react";
 import { CAROUSEL_ITEMS, type CarouselItem } from "../data/menu";
+import { useCart } from "../context/CartContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
 function CoffeeCard({ item, hidden }: { item: CarouselItem; hidden?: boolean }) {
+  const { add } = useCart();
   return (
     <article
       aria-hidden={hidden ? "true" : undefined}
-      className="group w-[230px] shrink-0 cursor-pointer sm:w-[260px]"
+      className="group w-[230px] shrink-0 sm:w-[260px]"
     >
       <div className="rounded-[24px] bg-cream p-3 shadow-[0_10px_30px_-12px_rgba(27,18,11,0.35)] ring-1 ring-espresso/5 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-5 group-hover:scale-[1.045] group-hover:shadow-[0_34px_60px_-18px_rgba(27,18,11,0.55)] group-hover:ring-lemon">
         {/* Image */}
@@ -22,9 +24,9 @@ function CoffeeCard({ item, hidden }: { item: CarouselItem; hidden?: boolean }) 
             className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-espresso/35 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-          <span className="absolute left-3 top-3 grid h-9 w-9 translate-y-2 place-items-center rounded-[12px] bg-lemon text-espresso opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+          <button onClick={() => add({ id: item.id.slice(1), name: item.name, desc: item.note, price: item.price, img: item.img, category: "coffee" })} aria-label={`Add ${item.name} to order`} className="absolute left-3 top-3 grid h-9 w-9 translate-y-2 place-items-center rounded-[12px] bg-lemon text-espresso opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 focus:translate-y-0 focus:opacity-100">
             <Plus size={17} strokeWidth={3} />
-          </span>
+          </button>
         </div>
 
         {/* Reveal name + price below the image on hover */}

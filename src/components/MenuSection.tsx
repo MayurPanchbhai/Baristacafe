@@ -3,10 +3,12 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Plus, UtensilsCrossed } from "lucide-react";
 import { FILTERS, MENU_ITEMS, type MenuItem } from "../data/menu";
+import { useCart } from "../context/CartContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
 function MenuCard({ item }: { item: MenuItem }) {
+  const { add } = useCart();
   return (
     <article className="menu-card group relative flex flex-col rounded-[24px] bg-cream p-3 shadow-[0_8px_28px_-14px_rgba(42,30,23,0.3)] ring-1 ring-espresso/5 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_28px_50px_-18px_rgba(124,92,191,0.45)] hover:ring-heather/40">
       <div className="relative h-48 overflow-hidden rounded-[18px] sm:h-52">
@@ -36,6 +38,7 @@ function MenuCard({ item }: { item: MenuItem }) {
             {item.category === "cold" ? "Cold Brew" : item.category}
           </span>
           <button
+            onClick={() => add(item)}
             className="grid h-10 w-10 place-items-center rounded-[16px] bg-espresso text-lemon transition-all duration-300 hover:rotate-90 hover:bg-heather-deep active:scale-90"
             aria-label={`Add ${item.name} to order`}
           >

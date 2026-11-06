@@ -11,6 +11,9 @@ import MenuSection from "./components/MenuSection";
 import About from "./components/About";
 import Reviews from "./components/Reviews";
 import Footer from "./components/Footer";
+import CartPanel from "./components/CartPanel";
+import { CartProvider } from "./context/CartContext";
+import RateUs from "./components/RateUs";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,6 +22,7 @@ const PAGE_REVEAL_DELAY_MS = 200;
 
 export default function App() {
   const [started, setStarted] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
 
   const handleDone = () => {
     window.setTimeout(() => {
@@ -28,9 +32,10 @@ export default function App() {
   };
 
   return (
+    <CartProvider>
     <div className="grain min-h-svh bg-porcelain font-body text-espresso">
       {!started && <Loader onDone={handleDone} />}
-      <Header started={started} />
+      <Header started={started} onCartOpen={() => setCartOpen(true)} />
       <main
         className={`transition-opacity duration-300 ${started ? "opacity-100" : "invisible opacity-0"}`}>
         <Hero started={started} />
@@ -40,6 +45,9 @@ export default function App() {
         <Reviews />
       </main>
       <Footer />
+      <CartPanel open={cartOpen} onClose={() => setCartOpen(false)} />
+      <RateUs />
     </div>
+    </CartProvider>
   );
 }
